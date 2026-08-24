@@ -113,9 +113,6 @@ trait SMTLIBParser {
 
 
     case SDecimal(value) =>
-      exprOps.normalizeFraction(FractionLiteral(
-        value.bigDecimal.movePointRight(value.scale).toBigInteger,
-        BigInt(10).pow(value.scale)))
       // A decimal stripped of its trailing zeros carries a negative scale (10.0
       // becomes 1E+1), which puts the power of ten in the numerator instead.
       val scale = value.scale
