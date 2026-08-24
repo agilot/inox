@@ -3,6 +3,7 @@
 package inox
 package solvers
 package smtlib
+package optimization
 
 import _root_.smtlib.trees.Commands._
 import _root_.smtlib.trees.CommandsResponses._
