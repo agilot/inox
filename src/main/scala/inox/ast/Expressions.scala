@@ -541,6 +541,47 @@ trait Expressions { self: Trees =>
   }
 
 
+  /* Real functions outside the SMT-LIB theories */
+
+  sealed abstract class RealFunction(val function: String) extends Expr with CachingTyped {
+    val args: Seq[Expr]
+
+    override protected def computeTpe(stripRefinements: Boolean)(using Symbols): Type =
+      getRealType(args.head, args.tail*)
+  }
+
+  /** $encodingof `sqrt(...)` over the reals */
+  sealed case class RealSqrt(e: Expr) extends RealFunction("sqrt") { val args = Seq(e) }
+
+  /** $encodingof `exp(...)` over the reals */
+  sealed case class RealExp(e: Expr) extends RealFunction("exp") { val args = Seq(e) }
+
+  /** $encodingof `log(...)` over the reals, the natural logarithm */
+  sealed case class RealLog(e: Expr) extends RealFunction("log") { val args = Seq(e) }
+
+  /** $encodingof `sin(...)` over the reals */
+  sealed case class RealSin(e: Expr) extends RealFunction("sin") { val args = Seq(e) }
+
+  /** $encodingof `cos(...)` over the reals */
+  sealed case class RealCos(e: Expr) extends RealFunction("cos") { val args = Seq(e) }
+
+  /** $encodingof `tan(...)` over the reals */
+  sealed case class RealTan(e: Expr) extends RealFunction("tan") { val args = Seq(e) }
+
+  /** $encodingof `asin(...)` over the reals */
+  sealed case class RealAsin(e: Expr) extends RealFunction("asin") { val args = Seq(e) }
+
+  /** $encodingof `acos(...)` over the reals */
+  sealed case class RealAcos(e: Expr) extends RealFunction("acos") { val args = Seq(e) }
+
+  /** $encodingof `atan(...)` over the reals */
+  sealed case class RealAtan(e: Expr) extends RealFunction("atan") { val args = Seq(e) }
+
+  /** $encodingof `pow(..., ...)` over the reals */
+  sealed case class RealPow(base: Expr, exponent: Expr) extends RealFunction("pow") {
+    val args = Seq(base, exponent)
+  }
+
   /* Bit-vector operations */
 
   /** $encodingof `~...` $noteBitvector */
@@ -851,7 +892,7 @@ trait Expressions { self: Trees =>
   sealed case class Tuple(exprs: Seq[Expr]) extends Expr with CachingTyped {
     require(exprs.size >= 2)
 
-    override protected def computeTpe(stripRefinements: Boolean)(using Symbols): Type = 
+    override protected def computeTpe(stripRefinements: Boolean)(using Symbols): Type =
       TupleType(exprs.map(_.getTpe(stripRefinements))).getTpe(stripRefinements)
   }
 

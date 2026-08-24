@@ -476,7 +476,7 @@ class InoxSerializer(val trees: ast.Trees, serializeProducts: Boolean = false) e
     * The `Serializer[_]` identifiers in this mapping range from 10 to 105
     * (ignoring special identifiers that are smaller than 10).
     *
-    * NEXT ID: 144
+    * NEXT ID: 154
     */
   protected def classSerializers: Map[Class[?], Serializer[?]] = Map(
     // Inox Expressions
@@ -572,6 +572,17 @@ class InoxSerializer(val trees: ast.Trees, serializeProducts: Boolean = false) e
     classSerializer[FPMax]             (135),
     classSerializer[FPMin]             (136),
     classSerializer[FPRound]           (137),
+
+    classSerializer[RealSqrt]          (144),
+    classSerializer[RealExp]           (145),
+    classSerializer[RealLog]           (146),
+    classSerializer[RealSin]           (147),
+    classSerializer[RealCos]           (148),
+    classSerializer[RealTan]           (149),
+    classSerializer[RealAsin]          (150),
+    classSerializer[RealAcos]          (151),
+    classSerializer[RealAtan]          (152),
+    classSerializer[RealPow]           (153),
 
     classSerializer[RoundTowardZero.type]        (115),
     classSerializer[RoundTowardPositive.type]    (116),

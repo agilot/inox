@@ -116,6 +116,13 @@ trait SMTLIBParser {
       exprOps.normalizeFraction(FractionLiteral(
         value.bigDecimal.movePointRight(value.scale).toBigInteger,
         BigInt(10).pow(value.scale)))
+      // A decimal stripped of its trailing zeros carries a negative scale (10.0
+      // becomes 1E+1), which puts the power of ten in the numerator instead.
+      val scale = value.scale
+      val unscaled = BigInt(value.bigDecimal.unscaledValue)
+      exprOps.normalizeFraction(
+        if (scale >= 0) FractionLiteral(unscaled, BigInt(10).pow(scale))
+        else FractionLiteral(unscaled * BigInt(10).pow(-scale), 1))
 
     case SString(value) =>
       StringLiteral(utils.StringUtils.decode(value))
@@ -197,7 +204,7 @@ trait SMTLIBParser {
     case FixedSizeBitVectors.ShiftLeft(e1, e2) => fromSMTUnifyType(e1, e2, otpe)(BVShiftLeft.apply)
     case FixedSizeBitVectors.AShiftRight(e1, e2) => fromSMTUnifyType(e1, e2, otpe)(BVAShiftRight.apply)
     case FixedSizeBitVectors.LShiftRight(e1, e2) => fromSMTUnifyType(e1, e2, otpe)(BVLShiftRight.apply)
-    case FixedSizeBitVectors.BV2Nat(e) => 
+    case FixedSizeBitVectors.BV2Nat(e) =>
       // we unfortunately cannot predict the type of e without translating it;
       // it will be a bitvector, but its size and signedness cannot be
       // ascertained externally
@@ -290,7 +297,7 @@ trait SMTLIBParser {
       val MapType(from, to) = fromSMT(sort): @unchecked
       FiniteMap(Seq.empty, d, from, to)
 
-    case AnnotatedTerm(term, attribute, attributes) => 
+    case AnnotatedTerm(term, attribute, attributes) =>
       // discard general annotations
       fromSMT(term, otpe)
 

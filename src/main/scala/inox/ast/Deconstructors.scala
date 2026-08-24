@@ -247,6 +247,56 @@ trait TreeDeconstructor {
       (NoIdentifiers, NoVariables, Seq(t1, t2), NoTypes, NoFlags,
         (_, _, es, _, _) => t.GreaterEquals(es(0), es(1)))
     },
+    classOf[s.RealSqrt] -> { expr =>
+      val s.RealSqrt(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealSqrt(es(0)))
+    },
+    classOf[s.RealExp] -> { expr =>
+      val s.RealExp(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealExp(es(0)))
+    },
+    classOf[s.RealLog] -> { expr =>
+      val s.RealLog(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealLog(es(0)))
+    },
+    classOf[s.RealSin] -> { expr =>
+      val s.RealSin(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealSin(es(0)))
+    },
+    classOf[s.RealCos] -> { expr =>
+      val s.RealCos(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealCos(es(0)))
+    },
+    classOf[s.RealTan] -> { expr =>
+      val s.RealTan(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealTan(es(0)))
+    },
+    classOf[s.RealAsin] -> { expr =>
+      val s.RealAsin(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealAsin(es(0)))
+    },
+    classOf[s.RealAcos] -> { expr =>
+      val s.RealAcos(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealAcos(es(0)))
+    },
+    classOf[s.RealAtan] -> { expr =>
+      val s.RealAtan(e) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealAtan(es(0)))
+    },
+    classOf[s.RealPow] -> { expr =>
+      val s.RealPow(base, exponent) = expr: @unchecked
+      (NoIdentifiers, NoVariables, Seq(base, exponent), NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealPow(es(0), es(1)))
+    },
     classOf[s.BVNot] -> { expr =>
       val s.BVNot(e) = expr: @unchecked
       (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,

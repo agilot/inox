@@ -76,7 +76,7 @@ lazy val nTestParallelism = {
 def ghProject(repo: String, version: String) = RootProject(uri(s"${repo}#${version}"))
 
 // lazy val smtlib = RootProject(file("../scala-smtlib")) // If you have a local copy of Scala-SMTLIB and would like to do some changes
-lazy val smtlib = ghProject("https://github.com/epfl-lara/scala-smtlib.git", "839bb4d8fe140b953c9f9b71fe3e015632f2397e")
+lazy val smtlib = ghProject("https://github.com/agilot/scala-smtlib.git", "218de4fd4022a9951ad182b48042e8f77e441398")
 
 lazy val scriptName = settingKey[String]("Name of the generated 'inox' script")
 
@@ -142,7 +142,13 @@ lazy val docs = project
     mdocIn  := file("src/main/doc"),
     mdocOut := file("doc"),
     mdocExtraArguments := Seq("--no-link-hygiene"),
+    scalaOrganization := laraOrganization,
     scalaVersion := inoxScalaVersion,
+    excludeDependencies ++= Seq(
+      ExclusionRule("org.scala-lang", "scala-library"),
+      ExclusionRule("org.scala-lang", "scala3-library_3"),
+      ExclusionRule("org.scala-lang", "scala3-compiler_3"),
+    ),
   )
   .enablePlugins(MdocPlugin)
 

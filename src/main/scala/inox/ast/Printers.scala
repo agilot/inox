@@ -305,6 +305,7 @@ trait Printer {
     case FPMax(e1, e2)    => p"max($e1, $e2)"
     case FPRound(rm, e)   => p"rint($e)"
     case Sqrt(_, e)       => p"sqrt($e)"
+    case f: RealFunction  => p"${f.function}(${nary(f.args, ", ")})"
     case FPLessThan(l, r) => optP {
       p"$l < $r"
     }
