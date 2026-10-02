@@ -113,7 +113,9 @@ final class TimerStorage private(val _name: Option[String])
     // stats = (min, avg, max, n, total)
     def stats(s: TimerStorage): (String, String, String, String, String) = (s.localN: @switch) match {
       case 0 => ("", "", "", "", "")
-      case 1 => ("", "", "", "", s.local.head.time.toString)
+      // `local` is not a member, so reaching for it went through `Dynamic`, printed the
+      // storage itself in place of the time, and left three sub-timers named after the walk.
+      case 1 => ("", "", "", "1", f"${s.localTotal}%d ms")
       case n =>
         val avg = s.localTotal / n
         (f"${s.localMin}%d ms", f"$avg%d ms", f"${s.localMax}%d ms", f"$n%d", f"${s.localTotal}%d ms")

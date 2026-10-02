@@ -19,14 +19,6 @@ object optIbexQuery extends OptionDef[String] {
   val usageRhs = "PATH"
 }
 
-object optIbexTimeout extends OptionDef[Double] {
-  import OptionParsers._
-  val name = "ibex-timeout"
-  val default = 0.5
-  val parser = doubleParser
-  val usageRhs = "SECONDS"
-}
-
 /** How close Ibex must bracket an optimum before it stops. */
 object optIbexEpsF extends OptionDef[Double] {
   import OptionParsers._
@@ -102,16 +94,22 @@ trait IbexTarget extends SMTLIBTarget {
   emit(SetLogic(QF_NRA()))
 
   emit(SetOption(AttributeOption(Attribute(
-    SKeyword("ibex-timeout"),
-    Some(SDecimal(BigDecimal(options.findOptionOrDefault(optIbexTimeout))))))))
-
-  emit(SetOption(AttributeOption(Attribute(
     SKeyword("ibex-abs-eps-f"),
     Some(SDecimal(BigDecimal(options.findOptionOrDefault(optIbexEpsF))))))))
 
   emit(SetOption(AttributeOption(Attribute(
     SKeyword("ibex-simpl-level"),
     Some(SNumeral(BigInt(options.findOptionOrDefault(optIbexSimplLevel))))))))
+
+  /** How long the server may search before answering with what it has established so far.
+    *
+    * The server reads this whenever it is set, so a caller that has a budget to divide can
+    * say what each query is worth instead of giving every one of them the same allowance.
+    */
+  def setSearchTimeout(seconds: Double): Unit =
+    emit(SetOption(AttributeOption(Attribute(
+      SKeyword("ibex-timeout"),
+      Some(SDecimal(BigDecimal(seconds max 0.001)))))))
 
   private val MaxNumeral = BigInt(2).pow(53)
 

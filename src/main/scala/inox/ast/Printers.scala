@@ -294,11 +294,13 @@ trait Printer {
     case FPToBV(size, true, _, e)   => p"$e.toSBV($size)"
     case FPToBV(size, false, _, e)   => p"$e.toUBV($size)"
     case FPToReal(e)      => p"$e.toReal"
-    case FPAdd(_, e1, e2) => p"$e1 + $e2"
-    case FPSub(_, e1, e2) => p"$e1 - $e2"
-    case FPUMinus(e)      => p"-$e"
-    case FPMul(_, e1, e2) => p"$e1 * $e2"
-    case FPDiv(_, e1, e2) => p"$e1 / $e2"
+    // Parenthesised by precedence, like the arithmetic above: floating-point operations do
+    // not associate, so `a + (b - c)` printed flat would read back as a different program.
+    case FPAdd(_, e1, e2) => optP { p"$e1 + $e2" }
+    case FPSub(_, e1, e2) => optP { p"$e1 - $e2" }
+    case FPUMinus(e)      => optP { p"-$e" }
+    case FPMul(_, e1, e2) => optP { p"$e1 * $e2" }
+    case FPDiv(_, e1, e2) => optP { p"$e1 / $e2" }
     case FPFMA(_, e1, e2, e3) => p"FMA($e1, $e2, $e3)"
     case FPAbs(e)         => p"abs($e)"
     case FPMin(e1, e2)    => p"min($e1, $e2)"
@@ -532,15 +534,19 @@ trait Printer {
     // 4: < >
     case (
       _: GreaterThan | _: GreaterEquals | _: LessEquals | _: LessThan |
-      _: BVAShiftRight | _: BVLShiftRight | _: BVShiftLeft
+      _: BVAShiftRight | _: BVLShiftRight | _: BVShiftLeft |
+      _: FPGreaterThan | _: FPGreaterEquals | _: FPLessEquals | _: FPLessThan
       ) => 4
     // 5: = !
-    case (_: Equals | _: Not | _: Implies) => 5
+    case (_: Equals | _: Not | _: Implies | _: FPEquals) => 5
     // 6: :
     // 7: + -
-    case (_: Plus | _: Minus | _: SetUnion | _: SetDifference | _: StringConcat) => 7
+    case (
+      _: Plus | _: Minus | _: SetUnion | _: SetDifference | _: StringConcat |
+      _: FPAdd | _: FPSub
+      ) => 7
     // 8: * / %
-    case (_: Times | _: Division | _: Remainder) => 8
+    case (_: Times | _: Division | _: Remainder | _: FPMul | _: FPDiv) => 8
     // 9: Other special characters
     case _ => 9
   }
