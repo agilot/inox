@@ -297,6 +297,16 @@ trait TreeDeconstructor {
       (NoIdentifiers, NoVariables, Seq(base, exponent), NoTypes, NoFlags,
         (_, _, es, _, _) => t.RealPow(es(0), es(1)))
     },
+    classOf[s.RealMax] -> { expr =>
+      val s.RealMax(args) = expr: @unchecked
+      (NoIdentifiers, NoVariables, args, NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealMax(es))
+    },
+    classOf[s.RealMin] -> { expr =>
+      val s.RealMin(args) = expr: @unchecked
+      (NoIdentifiers, NoVariables, args, NoTypes, NoFlags,
+        (_, _, es, _, _) => t.RealMin(es))
+    },
     classOf[s.BVNot] -> { expr =>
       val s.BVNot(e) = expr: @unchecked
       (NoIdentifiers, NoVariables, Seq(e), NoTypes, NoFlags,

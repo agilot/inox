@@ -582,6 +582,16 @@ trait Expressions { self: Trees =>
     val args = Seq(base, exponent)
   }
 
+  /** $encodingof `max(...)` over the reals, of two or more arguments */
+  sealed case class RealMax(args: Seq[Expr]) extends RealFunction("max") {
+    require(args.size >= 2)
+  }
+
+  /** $encodingof `min(...)` over the reals, of two or more arguments */
+  sealed case class RealMin(args: Seq[Expr]) extends RealFunction("min") {
+    require(args.size >= 2)
+  }
+
   /* Bit-vector operations */
 
   /** $encodingof `~...` $noteBitvector */

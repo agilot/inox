@@ -28,6 +28,19 @@ object optIbexEpsF extends OptionDef[Double] {
   val usageRhs = "REAL"
 }
 
+/** How close, relative to the optimum, Ibex must bracket it before it stops.
+  *
+  * Ibex stops as soon as either this or the absolute precision is met. Its own default is
+  * 1e-3, which leaves every bound up to 0.1% above the optimum.
+  */
+object optIbexRelEpsF extends OptionDef[Double] {
+  import OptionParsers._
+  val name = "ibex-rel-eps-f"
+  val default = 1e-9
+  val parser = doubleParser
+  val usageRhs = "REAL"
+}
+
 /** How hard Ibex works to simplify an expression before searching it. */
 object optIbexSimplLevel extends OptionDef[Int] {
   import OptionParsers._
@@ -96,6 +109,10 @@ trait IbexTarget extends SMTLIBTarget {
   emit(SetOption(AttributeOption(Attribute(
     SKeyword("ibex-abs-eps-f"),
     Some(SDecimal(BigDecimal(options.findOptionOrDefault(optIbexEpsF))))))))
+
+  emit(SetOption(AttributeOption(Attribute(
+    SKeyword("ibex-rel-eps-f"),
+    Some(SDecimal(BigDecimal(options.findOptionOrDefault(optIbexRelEpsF))))))))
 
   emit(SetOption(AttributeOption(Attribute(
     SKeyword("ibex-simpl-level"),

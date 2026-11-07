@@ -583,6 +583,8 @@ class InoxSerializer(val trees: ast.Trees, serializeProducts: Boolean = false) e
     classSerializer[RealAcos]          (151),
     classSerializer[RealAtan]          (152),
     classSerializer[RealPow]           (153),
+    classSerializer[RealMax]           (154),
+    classSerializer[RealMin]           (155),
 
     classSerializer[RoundTowardZero.type]        (115),
     classSerializer[RoundTowardPositive.type]    (116),
